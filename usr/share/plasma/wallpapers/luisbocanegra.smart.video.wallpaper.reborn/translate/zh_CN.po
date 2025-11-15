@@ -1,0 +1,318 @@
+# Translation of reborn in LANGUAGE
+# Copyright (C) 2025
+# This file is distributed under the same license as the reborn package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: reborn\n"
+"Report-Msgid-Bugs-To: https://github.com/luisbocanegra/plasma-smart-video-"
+"wallpaper-reborn\n"
+"POT-Creation-Date: 2025-03-03 07:39+0000\n"
+"PO-Revision-Date: 2025-11-08 09:24+0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.8\n"
+
+#: ../metadata.json
+msgid "Smart Video Wallpaper Reborn"
+msgstr "智能视频壁纸"
+
+#: ../metadata.json
+msgid "Wallpaper plugin to play videos on your desktop"
+msgstr "壁纸插件可以让你的桌面播放视频"
+
+#: ../contents/ui/components/Header.qml
+msgid "Version:"
+msgstr "版本："
+
+#: ../contents/ui/config.qml
+msgid "Maximized or full-screen windows"
+msgstr "最大化或全屏窗口"
+
+#: ../contents/ui/config.qml
+msgid "Active window is present"
+msgstr "活动窗口存在"
+
+#: ../contents/ui/config.qml
+msgid "At least one window is shown"
+msgstr "至少一个窗口出现"
+
+#: ../contents/ui/config.qml
+msgid "Videos"
+msgstr "视频"
+
+#: ../contents/ui/config.qml
+msgid "Playback"
+msgstr "播放"
+
+#: ../contents/ui/config.qml
+msgid "Desktop Effects"
+msgstr "桌面特效"
+
+#: ../contents/ui/config.qml
+msgid "Add new videos"
+msgstr "添加新视频"
+
+#: ../contents/ui/config.qml
+msgid "Hide videos list"
+msgstr "隐藏视频列表"
+
+#: ../contents/ui/config.qml
+msgid "Show videos list"
+msgstr "显示视频列表"
+
+#: ../contents/ui/config.qml
+msgid "Warning! Please read before applying (click to show)"
+msgstr "注意！请在应用之前阅读一些声明（单击并显示）"
+
+#: ../contents/ui/config.qml
+msgid "Videos are loaded in RAM, bigger files will use more system resources!"
+msgstr "视频将会加载到运行内存中，越大的文件将会消耗更大的系统资源！"
+
+#: ../contents/ui/config.qml
+msgid ""
+"Crashes/Black screen? Try changing the Qt Media Backend to gstreamer.<br>To "
+"recover from crash remove the videos from the configuration using this "
+"command below in terminal/tty then reboot:<br><strong><code>sed -i 's/"
+"^VideoUrls=.*$/VideoUrls=/g' $HOME/.config/plasma-org.kde.plasma.desktop-"
+"appletsrc $HOME/.config/kscreenlockerrc</code></strong>"
+msgstr ""
+"发生崩溃/黑屏？尝试将 Qt 媒体后端更改为 gstreamer。<br>要从崩溃中恢复，请使用"
+"以下命令在终端/tty 中从配置中删除视频，然后重启计算机：<br><strong><code>sed "
+"-i 's/^VideoUrls=.*$/VideoUrls=/g' $HOME/.config/plasma-"
+"org.kde.plasma.desktop-appletsrc $HOME/.config/kscreenlockerrc</code></"
+"strong>"
+
+#: ../contents/ui/config.qml
+msgid "Qt Media backend instructions"
+msgstr "Qt 媒体后端说明"
+
+#: ../contents/ui/config.qml
+msgid ""
+"Make sure to enable Hardware video acceleration in your system to reduce CPU/"
+"GPU usage when videos are playing."
+msgstr "确保在系统中启用硬件视频加速，以在播放视频时减少 CPU/GPU 的使用。"
+
+#: ../contents/ui/config.qml
+msgid "Learn how"
+msgstr "了解更多"
+
+#: ../contents/ui/config.qml
+msgid "Fill mode:"
+msgstr "填充模式："
+
+#: ../contents/ui/config.qml
+msgid "Stretch"
+msgstr "拉伸"
+
+#: ../contents/ui/config.qml
+msgid "Keep Proportions"
+msgstr "保持比例"
+
+#: ../contents/ui/config.qml
+msgid "Scaled and Cropped"
+msgstr "缩放和剪切"
+
+#: ../contents/ui/config.qml
+msgid "Background:"
+msgstr "背景："
+
+#: ../contents/ui/config.qml
+msgid "Select Background Color"
+msgstr "选择背景颜色"
+
+#: ../contents/ui/config.qml
+msgid "Play in random order:"
+msgstr "随机播放："
+
+#: ../contents/ui/config.qml
+msgid "Playback speed:"
+msgstr "播放速度："
+
+#: ../contents/ui/config.qml
+msgid "Reset to default"
+msgstr "重置默认值"
+
+#: ../contents/ui/config.qml
+msgid "Crossfade (Beta):"
+msgstr "交叉淡入淡出（Beta）:"
+
+#: ../contents/ui/config.qml
+msgid "Duration:"
+msgstr "持续时间："
+
+#: ../contents/ui/config.qml
+msgid ""
+"Adds a smooth transition between videos. <strong>Uses additional Memory and "
+"may cause playback isues when enabled.</strong>"
+msgstr ""
+"在视频之间添加平滑过渡。<strong>启用时会使用额外内存，可能导致播放问题。</"
+"strong>"
+
+#: ../contents/ui/config.qml
+msgid "Filter windows:"
+msgstr "过滤窗口："
+
+#: ../contents/ui/config.qml
+msgid "This screen only"
+msgstr "仅这个屏幕"
+
+#: ../contents/ui/config.qml
+msgid "Pause video:"
+msgstr "暂停视频："
+
+#: ../contents/ui/config.qml
+msgid "Never"
+msgstr "从不"
+
+#: ../contents/ui/config.qml
+msgid "Always"
+msgstr "总是"
+
+#: ../contents/ui/config.qml
+msgid "Mute audio:"
+msgstr "静音音频："
+
+#: ../contents/ui/config.qml
+msgid "Volume:"
+msgstr "音量："
+
+#: ../contents/ui/config.qml
+msgid "Video is paused"
+msgstr "视频已暂停"
+
+#: ../contents/ui/config.qml
+msgid "Blur video:"
+msgstr "模糊视频："
+
+#: ../contents/ui/config.qml
+msgid "Radius:"
+msgstr "半径："
+
+#: ../contents/ui/config.qml
+msgid ""
+"Quality of the blur is reduced if value exceeds 64. Higher values may cause "
+"the blur to stop working!"
+msgstr "如果值超过64，模糊的质量会降低。较高的数值可能导致模糊失效！"
+
+#: ../contents/ui/config.qml
+msgid "Animation duration:"
+msgstr "动画持续时间："
+
+#: ../contents/ui/config.qml
+msgid "On battery below:"
+msgstr "电池低于："
+
+#: ../contents/ui/config.qml
+msgid "Pause video"
+msgstr "暂停视频"
+
+#: ../contents/ui/config.qml
+msgid "Disable blur"
+msgstr "关闭模糊"
+
+#: ../contents/ui/config.qml
+msgid "Screen Off pauses video:"
+msgstr "屏幕关闭并暂停视频："
+
+#: ../contents/ui/config.qml
+msgid "Requires setting up command below!"
+msgstr "需要设置以下命令！"
+
+#: ../contents/ui/config.qml
+msgid "Screen state command:"
+msgstr "屏幕状态命令："
+
+#: ../contents/ui/config.qml
+msgid "cat /sys/class/backlight/intel_backlight/actual_brightness"
+msgstr "cat /sys/class/backlight/intel_backlight/actual_brightness"
+
+#: ../contents/ui/config.qml
+msgid "The command/script must return 0 (zero) when the screen is Off."
+msgstr "当屏幕关闭时，命令/脚本必须返回 0。"
+
+#: ../contents/ui/config.qml
+msgid "Enable debug:"
+msgstr "启用调试："
+
+#: ../contents/ui/config.qml
+msgid "Print debug messages to the system log"
+msgstr "将调试消息打印到系统日志"
+
+#: ../contents/ui/config.qml
+msgid ""
+"Comma separated list of effects (e.g. overview,cube). To get the currently "
+"enabled effects run:"
+msgstr ""
+"以逗号分隔的效果列表（例如：overview,cube）。要获取当前启用的效果，请运行："
+
+#: ../contents/ui/config.qml
+msgid "Play in:"
+msgstr "播放时："
+
+#: ../contents/ui/config.qml
+msgid "Pause in:"
+msgstr "暂停时："
+
+#: ../contents/ui/config.qml
+msgid "Show blur in:"
+msgstr "显示模糊时："
+
+#: ../contents/ui/config.qml
+msgid "Hide blur in:"
+msgstr "隐藏模糊时："
+
+#: ../contents/ui/config.qml
+msgid "Pick a video file"
+msgstr "选择一个视频文件"
+
+#: ../contents/ui/config.qml
+msgid "Video files"
+msgstr "视频文件"
+
+#: ../contents/ui/config.qml
+msgid "All files"
+msgstr "所有文件"
+
+#: ../contents/ui/config.qml
+msgid "Video Settings"
+msgstr "视频设置"
+
+#: ../contents/ui/config.qml
+msgid ""
+"A value other than 0.0 overrides the global Playback speed for this video."
+msgstr "除0.0以外的值将覆盖此视频的全局播放速度。"
+
+#: ../contents/ui/main.qml
+msgid "No video source \n"
+msgstr "没有视频源 \n"
+
+#: ../contents/ui/main.qml
+msgid "Next Video"
+msgstr "下一个视频"
+
+#: ../contents/ui/main.qml
+msgid "Pause"
+msgstr "暂停"
+
+#: ../contents/ui/main.qml
+msgid "Default"
+msgstr "默认"
+
+#: ../contents/ui/main.qml
+msgid "Play"
+msgstr "播放"
+
+#: ../contents/ui/main.qml
+msgid "Unmute"
+msgstr "取消静音"
+
+#: ../contents/ui/main.qml
+msgid "Mute"
+msgstr "静音"
