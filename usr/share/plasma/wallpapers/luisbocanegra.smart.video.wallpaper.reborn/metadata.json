@@ -19,7 +19,7 @@
         "Description[el_GR]": "Πρόσθετο ταπετσαρίας για αναπαραγωγή βίντεο στην επιφάνεια εργασίας σας",
         "Description[nl]": "Een achtergrondplug-in voor het tonen van video's op je bureaublad",
         "Description[pt_BR]": "Plugin de papel de parede para reproduzir vídeos na sua área de trabalho",
-        "Description[zh_CN]": "壁纸插件可以让你在桌面上播放视频",
+        "Description[zh_CN]": "在你的桌面上播放视频",
         "Icon": "preferences-desktop-wallpaper",
         "Id": "luisbocanegra.smart.video.wallpaper.reborn",
         "License": "GPLv2+",
@@ -28,7 +28,7 @@
         "Name[es]": "Smart Video Wallpaper Reborn",
         "Name[nl]": "Slimme videoachtergrond - herboren",
         "Name[zh_CN]": "长夜月梦幻壁纸（英文）",
-        "Version": "2.5.1",
+        "Version": "2.8.1",
         "Website": "https://github.com/luisbocanegra/plasma-smart-video-wallpaper-reborn"
     },
     "Keywords": [
