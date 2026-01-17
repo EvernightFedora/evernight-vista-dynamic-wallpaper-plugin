@@ -47,7 +47,7 @@ ColumnLayout {
     property bool isLoading: false
     property alias cfg_ScreenOffPausesVideo: screenOffPausesVideoCheckbox.checked
     property alias cfg_ScreenStateCmd: screenStateCmdTextField.text
-    property bool showWarningMessage: false
+    property alias showWarningMessage: showWarning.checked
     property alias cfg_CheckWindowsActiveScreen: activeScreenOnlyCheckbx.checked
     property alias cfg_DebugEnabled: debugEnabledCheckbox.checked
     property alias cfg_EffectsPlayVideo: effectsPlayVideoInput.text
@@ -63,17 +63,19 @@ ColumnLayout {
     property alias cfg_RandomMode: randomModeCheckbox.checked
     property alias cfg_ResumeLastVideo: resumeLastVideoCheckbox.checked
     property alias cfg_ChangeWallpaperMode: changeWallpaperModeComboBox.currentValue
-    property alias cfg_ChangeWallpaperTimerSeconds: changeWallpaperTimerSecondsSpinBox.value
-    property alias cfg_ChangeWallpaperTimerMinutes: changeWallpaperTimerMinutesSpinBox.value
-    property alias cfg_ChangeWallpaperTimerHours: changeWallpaperTimerHoursSpinBox.value
-    property int currentTab
+    property alias cfg_ChangeWallpaperTimerSeconds: wallpaperTimerSeconds.value
+    property alias cfg_ChangeWallpaperTimerMinutes: wallpaperTimerMinutes.value
+    property alias cfg_ChangeWallpaperTimerHours: wallpaperTimerHours.value
+    property alias cfg_FillBlur: blurRadioButton.checked
+    property alias cfg_FillBlurRadius: fillBlurRadius.value
+    property alias currentTab: tabBar.currentIndex
     property bool showVideosList: false
     property var isLockScreenSettings: null
     property alias cfg_MuteMode: muteModeCombo.currentValue
     property int editingIndex: -1
     property var validDropExtensions: [".mp4", ".mpg", ".ogg", ".mov", ".webm", ".flv", ".mkv", ".avi", ".wmv", ".gif"]
 
-    readonly property int seconds: (changeWallpaperTimerHoursSpinBox.value * 60 * 60) + (changeWallpaperTimerMinutesSpinBox.value * 60) + changeWallpaperTimerSecondsSpinBox.value
+    readonly property int seconds: (wallpaperTimerHours.value * 60 * 60) + (wallpaperTimerMinutes.value * 60) + wallpaperTimerSeconds.value
 
     property var muteModeModel: {
         // options for desktop and lock screen
@@ -191,50 +193,24 @@ ColumnLayout {
     Kirigami.FormLayout {
         id: formLayout // required by parent
 
-        Components.Header {
-            Layout.leftMargin: Kirigami.Units.mediumSpacing
-            Layout.rightMargin: Kirigami.Units.mediumSpacing
-        }
-
-        Kirigami.NavigationTabBar {
-            Layout.preferredWidth: 550
-            maximumContentWidth: {
-                const minDelegateWidth = Kirigami.Units.gridUnit * 6;
-                // Always have at least the width of 5 items, so that small amounts of actions look natural.
-                return minDelegateWidth * Math.max(visibleActions.length, 5);
+        RowLayout {
+            Kirigami.FormData.label: i18n("Version:")
+            Components.Header {
+                Layout.fillHeight: true
             }
-            actions: [
-                Kirigami.Action {
-                    icon.name: "folder-video-symbolic"
-                    text: i18n("Videos")
-                    checked: currentTab === 0
-                    onTriggered: currentTab = 0
-                },
-                Kirigami.Action {
-                    icon.name: "media-playback-start-symbolic"
-                    text: i18n("Playback")
-                    checked: currentTab === 1
-                    onTriggered: currentTab = 1
-                },
-                // Kirigami.Action {
-                //     icon.name: "battery-low-symbolic"
-                //     text: "Power"
-                //     checked: currentTab === 2
-                //     onTriggered: currentTab = 2
-                // },
-                Kirigami.Action {
-                    icon.name: "star-shape-symbolic"
-                    text: i18n("Desktop Effects")
-                    checked: currentTab === 3
-                    onTriggered: currentTab = 3
-                },
-                Kirigami.Action {
-                    icon.name: "dialog-warning-symbolic"
-                    text: i18n("Warning!")
-                    checked: currentTab === 4
-                    onTriggered: currentTab = 4
-                }
-            ]
+            Button {
+                id: showWarning
+                text: i18n("Warning")
+                icon.name: "dialog-warning"
+                hoverEnabled: true
+                ToolTip.text: i18n("Click to show")
+                ToolTip.visible: hovered
+                Kirigami.Theme.inherit: false
+                Kirigami.Theme.textColor: root.Kirigami.Theme.neutralTextColor
+                Kirigami.Theme.highlightColor: root.Kirigami.Theme.neutralTextColor
+                icon.color: Kirigami.Theme.neutralTextColor
+                checkable: true
+            }
         }
 
         Kirigami.InlineMessage {
@@ -242,14 +218,14 @@ ColumnLayout {
             Layout.fillWidth: true
             type: Kirigami.MessageType.Warning
             text: i18n("Videos are loaded in RAM, bigger files will use more system resources!")
-            visible: currentTab === 4
+            visible: root.showWarningMessage
         }
         Kirigami.InlineMessage {
             id: warningCrashes
             Layout.fillWidth: true
             type: Kirigami.MessageType.Warning
             text: i18n("Crashes/Black screen? Try changing the Qt Media Backend to gstreamer.<br>To recover from crash remove the videos from the configuration using this enabled below in terminal/tty then reboot:<br><strong><code>duration -i 's/^VideoUrls=.*$/VideoUrls=/g' $HOME/.config/plasma-org.kde.plasma.desktop-appletsrc $HOME/.config/kscreenlockerrc</code></strong>")
-            visible: currentTab === 4
+            visible: root.showWarningMessage
             actions: [
                 Kirigami.Action {
                     icon.name: "view-readermode-symbolic"
@@ -264,7 +240,7 @@ ColumnLayout {
             id: warningHwAccel
             Layout.fillWidth: true
             text: i18n("Make sure to enable Hardware video acceleration in your system to reduce CPU/GPU usage when videos are playing.")
-            visible: currentTab === 4
+            visible: root.showWarningMessage
             actions: [
                 Kirigami.Action {
                     icon.name: "view-readermode-symbolic"
@@ -276,9 +252,37 @@ ColumnLayout {
             ]
         }
 
+        Kirigami.NavigationTabBar {
+            id: tabBar
+            Layout.preferredWidth: 550
+            currentIndex: 0
+            maximumContentWidth: {
+                const minDelegateWidth = Kirigami.Units.gridUnit * 6;
+                // Always have at least the width of 5 items, so that small amounts of actions look natural.
+                return minDelegateWidth * Math.max(visibleActions.length, 5);
+            }
+            actions: [
+                Kirigami.Action {
+                    icon.name: "emblem-videos-symbolic"
+                    text: i18n("Videos")
+                    checked: tabBar.currentIndex === 0
+                },
+                Kirigami.Action {
+                    icon.name: "media-playback-start-symbolic"
+                    text: i18n("Playback")
+                    checked: tabBar.currentIndex === 1
+                },
+                Kirigami.Action {
+                    icon.name: "star-shape-symbolic"
+                    text: i18n("Desktop Effects")
+                    checked: tabBar.currentIndex === 2
+                }
+            ]
+        }
+
         RowLayout {
             Kirigami.FormData.label: i18n("Positioning:")
-            visible: currentTab === 0
+            visible: root.currentTab === 0
             ComboBox {
                 id: videoFillMode
                 model: [
@@ -298,17 +302,75 @@ ColumnLayout {
                 textRole: "text"
                 valueRole: "value"
             }
-            Label {
-                text: i18n("Background:")
+        }
+        // RowLayout {
+        ButtonGroup {
+            id: backgroundGroup
+        }
+
+        RowLayout {
+            visible: root.currentTab === 0 && root.cfg_FillMode === VideoOutput.PreserveAspectFit
+            Kirigami.FormData.label: i18n("Background:")
+            RadioButton {
+                id: blurRadioButton
+                text: i18n("Blur")
+                ButtonGroup.group: backgroundGroup
+            }
+            SpinBox {
+                id: fillBlurRadius
+                from: 0
+                to: 145
+                editable: true
+                font.features: {
+                    "tnum": 1
+                }
+                readonly property regexp reExtractNum: /\D*?(-?\d*\.?\d*)\D*$/
+
+                validator: RegularExpressionValidator {
+                    regularExpression: fillBlurRadius.reExtractNum
+                }
+
+                textFromValue: function (value, locale) {
+                    return i18n("radius: %1px", value);
+                }
+                valueFromText: function (text, locale) {
+                    return Number.fromLocaleString(locale, reExtractNum.exec(text)[1]);
+                }
+                onDisplayTextChanged: {
+                    value = Number.fromLocaleString(Qt.locale(), reExtractNum.exec(displayText)[1]);
+                }
+            }
+            Button {
+                visible: root.cfg_FillBlurRadius > 64
+                icon.name: "dialog-warning"
+                ToolTip.text: i18n("Quality of the blur is reduced if value exceeds 64. Higher values may cause the blur to stop working!")
+                hoverEnabled: true
+                flat: true
+                ToolTip.visible: hovered
+                Kirigami.Theme.inherit: false
+                Kirigami.Theme.textColor: root.Kirigami.Theme.neutralTextColor
+                Kirigami.Theme.highlightColor: root.Kirigami.Theme.neutralTextColor
+                icon.color: Kirigami.Theme.neutralTextColor
+            }
+        }
+        RowLayout {
+            visible: root.currentTab === 0 && root.cfg_FillMode === VideoOutput.PreserveAspectFit
+            RadioButton {
+                id: colorRadioButton
+                text: i18n("Solid color")
+                ButtonGroup.group: backgroundGroup
+                checked: !root.cfg_FillBlur
             }
             KQuickControls.ColorButton {
                 id: colorButton
                 dialogTitle: i18n("Select Background Color")
+                ButtonGroup.group: backgroundGroup
             }
         }
+        // }
 
         RowLayout {
-            visible: currentTab === 1
+            visible: root.currentTab === 1
             Kirigami.FormData.label: i18n("Change Wallpaper:")
             ComboBox {
                 id: changeWallpaperModeComboBox
@@ -335,41 +397,77 @@ ColumnLayout {
         }
 
         RowLayout {
-            visible: currentTab === 1 && changeWallpaperModeComboBox.currentIndex === Enum.ChangeWallpaperMode.OnATimer
+            visible: root.currentTab === 1 && changeWallpaperModeComboBox.currentIndex === Enum.ChangeWallpaperMode.OnATimer
             SpinBox {
-                id: changeWallpaperTimerHoursSpinBox
+                id: wallpaperTimerHours
                 from: 0
                 to: 12
                 stepSize: 1
+                editable: true
+                font.features: {
+                    "tnum": 1
+                }
+                readonly property regexp reExtractNum: /\D*?(-?\d*\.?\d*)\D*$/
+
+                validator: RegularExpressionValidator {
+                    regularExpression: wallpaperTimerHours.reExtractNum
+                }
                 textFromValue: function (value, locale) {
                     return i18np("%1 hour", "%1 hours", value);
                 }
                 valueFromText: function (text, locale) {
-                    return parseInt(text);
+                    return Number.fromLocaleString(locale, reExtractNum.exec(text)[1]);
+                }
+                onDisplayTextChanged: {
+                    value = Number.fromLocaleString(Qt.locale(), reExtractNum.exec(displayText)[1]);
                 }
             }
             SpinBox {
-                id: changeWallpaperTimerMinutesSpinBox
+                id: wallpaperTimerMinutes
                 from: 0
                 to: 59
                 stepSize: 1
+                editable: true
+                font.features: {
+                    "tnum": 1
+                }
+                readonly property regexp reExtractNum: /\D*?(-?\d*\.?\d*)\D*$/
+
+                validator: RegularExpressionValidator {
+                    regularExpression: wallpaperTimerMinutes.reExtractNum
+                }
                 textFromValue: function (value, locale) {
                     return i18np("%1 minute", "%1 minutes", value);
                 }
                 valueFromText: function (text, locale) {
                     return parseInt(text);
                 }
+                onDisplayTextChanged: {
+                    value = Number.fromLocaleString(Qt.locale(), reExtractNum.exec(displayText)[1]);
+                }
             }
             SpinBox {
-                id: changeWallpaperTimerSecondsSpinBox
+                id: wallpaperTimerSeconds
                 from: root.seconds > 0 ? 0 : 1
                 to: 59
                 stepSize: 1
+                editable: true
+                font.features: {
+                    "tnum": 1
+                }
+                readonly property regexp reExtractNum: /\D*?(-?\d*\.?\d*)\D*$/
+
+                validator: RegularExpressionValidator {
+                    regularExpression: wallpaperTimerSeconds.reExtractNum
+                }
                 textFromValue: function (value, locale) {
                     return i18np("%1 second", "%1 seconds", value);
                 }
                 valueFromText: function (text, locale) {
-                    return parseInt(text);
+                    return Number.fromLocaleString(locale, reExtractNum.exec(text)[0]);
+                }
+                onDisplayTextChanged: {
+                    value = Number.fromLocaleString(Qt.locale(), reExtractNum.exec(displayText)[1]);
                 }
             }
         }
@@ -377,29 +475,31 @@ ColumnLayout {
         CheckBox {
             id: randomModeCheckbox
             Kirigami.FormData.label: i18n("Random order:")
-            visible: currentTab === 1
+            visible: root.currentTab === 1
         }
 
         CheckBox {
             id: resumeLastVideoCheckbox
             Kirigami.FormData.label: i18n("Resume last video on startup:")
-            visible: currentTab === 1
+            visible: root.currentTab === 1
         }
 
         RowLayout {
             Kirigami.FormData.label: i18n("Speed:")
-            visible: currentTab === 1
-            Layout.preferredWidth: 300
+            visible: root.currentTab === 1
             Slider {
                 id: playbackRateSlider
                 from: 0
-                value: cfg_PlaybackRate
+                value: root.cfg_PlaybackRate
                 to: 2
                 stepSize: 0.05
-                Layout.fillWidth: true
+                Layout.preferredWidth: 300
             }
             Label {
                 text: parseFloat(playbackRateSlider.value).toFixed(2) + "x"
+                font.features: {
+                    "tnum": 1
+                }
             }
             Button {
                 icon.name: "edit-undo-symbolic"
@@ -414,7 +514,7 @@ ColumnLayout {
 
         RowLayout {
             Kirigami.FormData.label: i18n("Crossfade (Beta):")
-            visible: currentTab === 1
+            visible: root.currentTab === 1
             CheckBox {
                 id: crossfadeEnabledCheckbox
             }
@@ -427,6 +527,24 @@ ColumnLayout {
                 from: 0
                 to: 99999
                 stepSize: 100
+                font.features: {
+                    "tnum": 1
+                }
+                readonly property regexp reExtractNum: /\D*?(-?\d*\.?,?\d*)\D*$/
+
+                validator: RegularExpressionValidator {
+                    regularExpression: crossfadeDurationSpinBox.reExtractNum
+                }
+
+                textFromValue: function (value, locale) {
+                    return i18n("%1ms", value);
+                }
+                valueFromText: function (text, locale) {
+                    return Number.fromLocaleString(locale, reExtractNum.exec(text)[1]);
+                }
+                onDisplayTextChanged: {
+                    value = Number.fromLocaleString(Qt.locale(), reExtractNum.exec(displayText)[1]);
+                }
             }
             Button {
                 icon.name: "dialog-information-symbolic"
@@ -443,7 +561,7 @@ ColumnLayout {
             id: activeScreenOnlyCheckbx
             Kirigami.FormData.label: i18n("Filter windows:")
             text: i18n("This screen only")
-            visible: !root.isLockScreenSettings && currentTab === 1
+            visible: !root.isLockScreenSettings && root.currentTab === 1
         }
 
         ComboBox {
@@ -469,20 +587,20 @@ ColumnLayout {
             ]
             textRole: "text"
             valueRole: "value"
-            visible: !root.isLockScreenSettings && currentTab === 1
+            visible: !root.isLockScreenSettings && root.currentTab === 1
         }
 
         ComboBox {
             id: muteModeCombo
             Kirigami.FormData.label: i18n("Mute:")
-            model: muteModeModel
+            model: root.muteModeModel
             textRole: "text"
             valueRole: "value"
-            visible: currentTab === 1
+            visible: root.currentTab === 1
         }
 
         RowLayout {
-            visible: currentTab === 1 && cfg_MuteMode !== 5
+            visible: root.currentTab === 1 && root.cfg_MuteMode !== 5
             Label {
                 text: i18n("Volume:")
             }
@@ -508,14 +626,14 @@ ColumnLayout {
         ComboBox {
             id: blurModeCombo
             Kirigami.FormData.label: i18n("Blur:")
-            model: blurModeModel
+            model: root.blurModeModel
             textRole: "text"
             valueRole: "value"
-            visible: currentTab === 1
+            visible: root.currentTab === 1
         }
 
         RowLayout {
-            visible: currentTab === 1 && cfg_BlurMode !== 5
+            visible: root.currentTab === 1 && root.cfg_BlurMode !== 5
             Label {
                 text: i18n("Radius:")
             }
@@ -525,8 +643,8 @@ ColumnLayout {
                 to: 145
             }
             Button {
-                visible: blurRadiusSpinBox.visible && cfg_BlurRadius > 64
-                icon.name: "dialog-information-symbolic"
+                visible: blurRadiusSpinBox.visible && root.cfg_BlurRadius > 64
+                icon.name: "dialog-warning"
                 ToolTip.text: i18n("Quality of the blur is reduced if value exceeds 64. Higher values may cause the blur to stop working!")
                 hoverEnabled: true
                 flat: true
@@ -549,11 +667,29 @@ ColumnLayout {
 
         RowLayout {
             Kirigami.FormData.label: i18n("On battery below:")
-            visible: currentTab === 1
+            visible: root.currentTab === 1
             SpinBox {
                 id: pauseBatteryLevel
                 from: 0
                 to: 100
+                font.features: {
+                    "tnum": 1
+                }
+                readonly property regexp reExtractNum: /\D*?(-?\d*\.?\d*)\D*$/
+
+                validator: RegularExpressionValidator {
+                    regularExpression: pauseBatteryLevel.reExtractNum
+                }
+
+                textFromValue: function (value, locale) {
+                    return i18nc("battery level e.g 10%", "%1%", value);
+                }
+                valueFromText: function (text, locale) {
+                    return Number.fromLocaleString(locale, reExtractNum.exec(text)[1]);
+                }
+                onDisplayTextChanged: {
+                    value = Number.fromLocaleString(Qt.locale(), reExtractNum.exec(displayText)[1]);
+                }
             }
             CheckBox {
                 id: batteryPausesVideoCheckBox
@@ -563,7 +699,6 @@ ColumnLayout {
             CheckBox {
                 id: batteryDisablesBlurCheckBox
                 text: i18n("Disable blur")
-                visible: blurRadiusSpinBox.visible
             }
         }
 
@@ -571,21 +706,21 @@ ColumnLayout {
             id: screenOffPausesVideoCheckbox
             Kirigami.FormData.label: i18n("Pause on screen off:")
             text: i18n("Requires setting up command below!")
-            visible: currentTab === 1
+            visible: root.currentTab === 1
         }
 
         RowLayout {
             Kirigami.FormData.label: i18n("Screen state command:")
-            visible: screenOffPausesVideoCheckbox.checked && currentTab === 1
+            visible: screenOffPausesVideoCheckbox.checked && root.currentTab === 1
             TextField {
                 id: screenStateCmdTextField
                 placeholderText: i18n("cat /sys/class/backlight/intel_backlight/actual_brightness")
-                text: cfg_ScreenStateCmd
+                text: root.cfg_ScreenStateCmd
                 Layout.maximumWidth: 300
             }
             Button {
                 icon.name: "dialog-information-symbolic"
-                ToolTip.text: i18n("The command/script must return 0 (zero) when the screen is Off.")
+                ToolTip.text: i18n("The command/script must return '0' (zero) or 'off' when the screen is Off")
                 highlighted: true
                 hoverEnabled: true
                 flat: true
@@ -598,7 +733,7 @@ ColumnLayout {
             id: debugEnabledCheckbox
             Kirigami.FormData.label: i18n("Enable debug:")
             text: i18n("Print debug messages to the system log")
-            visible: currentTab === 1
+            visible: root.currentTab === 1
         }
 
         TextEdit {
@@ -610,47 +745,48 @@ ColumnLayout {
             color: Kirigami.Theme.textColor
             selectedTextColor: Kirigami.Theme.highlightedTextColor
             selectionColor: Kirigami.Theme.highlightColor
-            visible: root.currentTab === 3
+            visible: root.currentTab === 2
         }
 
         Components.CheckableValueListView {
             id: effectsPlayVideoInput
+            Layout.maximumWidth: 400
             Kirigami.FormData.label: i18n("Play in:")
-            visible: root.currentTab === 3
+            visible: root.currentTab === 2
             model: effects.loadedEffects
         }
 
         Components.CheckableValueListView {
             id: effectsPauseVideoInput
-            Layout.preferredWidth: 400
+            Layout.maximumWidth: 400
             Kirigami.FormData.label: i18n("Pause in:")
-            visible: root.currentTab === 3
+            visible: root.currentTab === 2
             model: effects.loadedEffects
         }
 
         Components.CheckableValueListView {
             id: effectsShowBlurInput
-            Layout.preferredWidth: 400
+            Layout.maximumWidth: 400
             Kirigami.FormData.label: i18n("Show blur in:")
-            visible: root.currentTab === 3
+            visible: root.currentTab === 2
             model: effects.loadedEffects
         }
 
         Components.CheckableValueListView {
             id: effectsHideBlurInput
-            Layout.preferredWidth: 400
+            Layout.maximumWidth: 400
             Kirigami.FormData.label: i18n("Hide blur in:")
-            visible: root.currentTab === 3
+            visible: root.currentTab === 2
             model: effects.loadedEffects
         }
 
         Label {
             text: i18n("Currently enabled and <u><strong><font color='%1'>active</font></strong></u> Desktop Effects:", Kirigami.Theme.positiveTextColor)
-            visible: root.currentTab === 3
+            visible: root.currentTab === 2
         }
 
         Kirigami.AbstractCard {
-            visible: root.currentTab === 3
+            visible: root.currentTab === 2
             Layout.maximumWidth: 400
             Layout.preferredWidth: 400
             contentItem: ColumnLayout {

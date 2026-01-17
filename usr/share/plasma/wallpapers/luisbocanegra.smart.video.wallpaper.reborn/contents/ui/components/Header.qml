@@ -14,7 +14,12 @@ RowLayout {
     readonly property string projects: "https://github.com/" + ghUser + "?tab=repositories&q=&type=source&language=&sort=stargazers"
     readonly property string kdeStore: "https://store.kde.org/p/2139746"
     readonly property string matrixRoom: "https://matrix.to/#/#kde-plasma-smart-video-wallpaper-reborn:matrix.org"
-    property string wallpaperVersion
+    property string wallpaperVersion // Plasmoid.metaData.version doesn't work in wallpaper plugin settings
+
+    Component.onCompleted: {
+        const metaDataFile = Qt.resolvedUrl("../../../").toString().substring(7) + "metadata.json";
+        runCommand.run(`cat "${metaDataFile}"`);
+    }
 
     Root.RunCommand {
         id: runCommand
@@ -33,24 +38,23 @@ RowLayout {
         }
     }
 
-    Component.onCompleted: {
-        const metaDataFile = Qt.resolvedUrl("../../../").toString().substring(7) + "metadata.json";
-        console.log(metaDataFile);
-        runCommand.run(`cat "${metaDataFile}"`);
+    Label {
+        text: wallpaperVersion
+        font.weight: Font.DemiBold
     }
 
-    Item {
-        Layout.fillWidth: true
-    }
-    RowLayout {
-        Layout.alignment: Qt.AlignRight
-        Label {
-            text: i18n("Version:")
+    Button {
+        id: linksButton
+        text: i18n("About")
+        icon.name: "info-symbolic"
+        onClicked: {
+            if (menu.opened) {
+                menu.close();
+            } else {
+                menu.open();
+            }
         }
-        Label {
-            text: wallpaperVersion
-            font.weight: Font.DemiBold
-        }
+        Layout.fillHeight: true
     }
 
     Menu {
@@ -142,17 +146,6 @@ RowLayout {
             text: "More projects"
             onTriggered: Qt.openUrlExternally(projects)
             icon.name: "starred-symbolic"
-        }
-    }
-    ToolButton {
-        id: linksButton
-        icon.name: "application-menu"
-        onClicked: {
-            if (menu.opened) {
-                menu.close();
-            } else {
-                menu.open();
-            }
         }
     }
 }
